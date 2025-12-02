@@ -1,33 +1,80 @@
 import rclpy
 import threading
+import tf2_ros
 from rclpy.node import Node
-from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Point, Quaternion, Pose
+from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Point, Quaternion, Pose, TransformStamped
+from nav_msgs.msg import Odometry
 from fielder_navigation.websocket import get_twist, connect_ws, get_pose
+import math
 
 
 class FielderOdometry(Node):
 
     def __init__(self):
         super().__init__('fielder_odom_pub')
-        self.twist_pub = self.create_publisher(TwistWithCovariance, 'fielder/twist', 10)
-        self.pose_pub = self.create_publisher(PoseWithCovariance, 'fielder/pose', 10)
+        self.odom_publisher = self.create_publisher(Odometry, '/odom', 10)
+        self.tf_publisher = tf2_ros.TransformBroadcaster(self)
         timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.publish_callback)
+
+        self.last_time = self.get_clock().now()
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
         ws_thread = threading.Thread(target= connect_ws, daemon=True)
         ws_thread.start()
 
     def publish_callback(self):
-        self.twist_publisher()
-        self.pose_publisher()
+        current_time = self.get_clock().now()
+        dt = (current_time - self.last_time).nanoseconds / 1e9
+        self.last_time = current_time
+
+        pose_data = get_pose()
+        twist_data = get_twist()
+
+        # declare odom header
+        odommsg = Odometry()
+        odommsg.header.stamp = current_time.to_msg()
+        odommsg.header.frame_id = 'odom'
+        odommsg.child_frame_id = 'base_link'
+
+        # set odom pose
+        odommsg.pose.pose.position = Point(x=pose_data['x'], y=pose_data['y'], z=pose_data['z'])
+        odommsg.pose.pose.orientation = Quaternion(x=pose_data['qx'], y=pose_data['qy'], z=pose_data['qz'], w=pose_data['qw'])
+
+        # set odom twist
+        odommsg.twist.twist.linear.x = twist_data['lin']
+        odommsg.twist.twist.linear.y = float(0.0)
+        odommsg.twist.twist.linear.z = float(0.0)
+
+        odommsg.twist.twist.angular.x = float(0.0)
+        odommsg.twist.twist.angular.y = float(0.0)
+        odommsg.twist.twist.angular.z = twist_data['ang']
+
+        self.odom_publisher.publish(odommsg)
+
+        # declare TF odom -> base_link
+        odom_tf = TransformStamped()
+        odom_tf.header.stamp = current_time.to_msg()
+        odom_tf.header.frame_id = 'odom'
+        odom_tf.child_frame_id = 'base_link'
+        odom_tf.transform.translation.x = self.x
+        odom_tf.transform.translation.y = self.y
+        odom_tf.transform.translation.z = self.z
+        odom_tf.transform.rotation = Quaternion(x=pose_data['qx'], y=pose_data['qy'], z=pose_data['qz'], w=pose_data['qw'])
+
+        self.tf_publisher.sendTransform(odom_tf)
 
     def pose_publisher(self):
         posemsg = PoseWithCovariance()
         pose_data = get_pose()
         posemsg.pose.position = Point(x=pose_data['x'], y=pose_data['y'], z=pose_data['z'])
         posemsg.pose.orientation = Quaternion(x=pose_data['qx'], y=pose_data['qy'], z=pose_data['qz'], w=pose_data['qw'])
-        self.pose_pub.publish(posemsg)
+        #self.pose_pub.publish(posemsg)
 
         self.get_logger().info(f'Publishing: Pose: {posemsg.pose.position}, Orientation: {posemsg.pose.orientation}')
+
+        return posemsg
 
     def twist_publisher(self):
         twistmsg = TwistWithCovariance()
@@ -42,8 +89,10 @@ class FielderOdometry(Node):
         twistmsg.twist.angular.y = float(0.0)
         twistmsg.twist.angular.z = twist_data['ang']
 
-        self.twist_pub.publish(twistmsg)
+        #self.twist_pub.publish(twistmsg)
         #self.get_logger().info(f'Publishing: Linear: {twistmsg.twist.linear.x}, Angular: {twistmsg.twist.angular.z}')
+
+        return twistmsg
 
 
 def main(args=None):

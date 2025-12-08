@@ -34,6 +34,10 @@ ros_pose = {
     "qw" : 0.0
 }
 
+point_cloud_data = {
+    "points" : []
+}
+
 def connect_ws():
 
     uri = f"{ws_url}/ws/v2/topics"
@@ -67,6 +71,33 @@ def connect_ws():
     
     except Exception as e:
         print("Websocket Error: ", e)
+
+def connect_ws_scan():
+
+    uri = f"{ws_url}/ws/v2/topics"
+
+    try:
+        with connect(uri) as ws:
+            print(f"Websocket connected to {ip}\n")
+
+            ws.send(json.dumps({"disable_topic": ["/slam/state"]}))
+            ws.send(json.dumps({"enable_topic": "/scan_matched_points2"}))
+
+            while True:
+                msg = ws.recv()
+                msg_json = json.loads(msg)
+                topic = msg_json.get("topic")
+
+                if topic == '/scan_matched_points2':
+                    point_cloud_data["points"] = msg_json["points"]
+
+                    time.sleep(0.01)
+    
+    except Exception as e:
+        print("Websocket Error: ", e)
+
+def get_point_cloud():
+    return point_cloud_data
 
 def get_twist():
     return twist_data
@@ -104,4 +135,4 @@ def degrees_to_quartenions(deg):
 
 
 if __name__ == "__main__":
-    connect_ws()
+    connect_ws_scan()

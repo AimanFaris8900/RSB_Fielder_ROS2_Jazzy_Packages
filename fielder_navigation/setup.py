@@ -1,5 +1,7 @@
 from setuptools import find_packages, setup
+from glob import glob
 import sys
+import os
 
 package_name = 'fielder_navigation'
 
@@ -11,6 +13,9 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        # Add launch files
+        (os.path.join('share', package_name, 'launch'), 
+            glob('launch/*.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -27,11 +32,12 @@ setup(
     entry_points={
         'console_scripts': [
             'fielder_odom = fielder_navigation.fielder_odometry_node:main',
+            'fielder_pc2 = fielder_navigation.fielder_scan_node:main',
         ],
     },
     options={
         'build_scripts': {
             'executable': sys.executable,
         },
-    }
+    },
 )

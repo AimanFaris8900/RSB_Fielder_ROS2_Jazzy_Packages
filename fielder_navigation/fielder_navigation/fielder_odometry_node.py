@@ -52,15 +52,17 @@ class FielderOdometry(Node):
         odommsg.twist.twist.angular.z = twist_data['ang']
 
         self.odom_publisher.publish(odommsg)
+        #self.get_logger().info(f'Publishing odom: Position: {odommsg.pose.pose.position}')
+        #self.get_logger().info(f'Publishing odom: Orientation: {odommsg.pose.pose.orientation}')
 
         # declare TF odom -> base_link
         odom_tf = TransformStamped()
         odom_tf.header.stamp = current_time.to_msg()
         odom_tf.header.frame_id = 'odom'
         odom_tf.child_frame_id = 'base_link'
-        odom_tf.transform.translation.x = self.x
-        odom_tf.transform.translation.y = self.y
-        odom_tf.transform.translation.z = self.z
+        odom_tf.transform.translation.x = pose_data['x']
+        odom_tf.transform.translation.y = pose_data['y']
+        odom_tf.transform.translation.z = pose_data['z']
         odom_tf.transform.rotation = Quaternion(x=pose_data['qx'], y=pose_data['qy'], z=pose_data['qz'], w=pose_data['qw'])
 
         self.tf_publisher.sendTransform(odom_tf)

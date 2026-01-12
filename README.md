@@ -5,7 +5,7 @@
 Install required packages:
 ```bash
 sudo apt update
-sudo apt install ros-jazzy-twist-mux ros-jazzy-slam-toolbox ros-jazzy-nav2-bringup 
+sudo apt install ros-jazzy-twist-mux ros-jazzy-slam-toolbox ros-jazzy-nav2-bringup ros-joint-state-publisher-gui
 
 ## Build
 ```bash

@@ -7,6 +7,8 @@
   <maintainer email="aimanfaris.af@gmail.com">rsbdev</maintainer>
   <license>TODO: License declaration</license>
 
+  <buildtool_depend>ament_python</buildtool_depend>
+
   <exec_depend>asyncio</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>pointcloud_to_laserscan</exec_depend>

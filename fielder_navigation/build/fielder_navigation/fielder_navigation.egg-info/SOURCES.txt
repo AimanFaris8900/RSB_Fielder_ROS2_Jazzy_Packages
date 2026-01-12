@@ -1,6 +1,8 @@
 package.xml
 setup.cfg
 setup.py
+config/mapper_params_online_async.yaml
+config/twist_mux.yaml
 fielder_navigation/__init__.py
 fielder_navigation/fielder_odometry_node.py
 fielder_navigation/fielder_scan_node.py

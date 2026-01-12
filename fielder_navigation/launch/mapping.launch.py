@@ -11,13 +11,10 @@ import os
 package_name = 'fielder_navigation'
 
 def generate_launch_description():
-    pkg_share = FindPackageShare(package_name).find(package_name)
+    #pkg_share = FindPackageShare(package_name).find(package_name)
+    pkg_share = get_package_share_directory(package_name)
     slam_dir = get_package_share_directory('slam_toolbox')
-    twist_mux_config = os.path.join(
-        get_package_share_directory(package_name),
-        'config',
-        'twist_mux.yaml'
-    )
+    twist_mux_config = os.path.join(pkg_share,'config','twist_mux.yaml')
 
     origin_dock_arg = DeclareLaunchArgument(
         'origin_dock',
@@ -54,7 +51,7 @@ def generate_launch_description():
             executable='twist_mux',
             name='twist_mux',
             output='screen',
-            parameters=[twist_mux_config],
+            arguments=['--ros-args', '--params-file', twist_mux_config, '--log-level', 'debug'],
             remappings=[
                 ('cmd_vel_out', 'diff_cont/cmd_vel_unstamped')
             ]

@@ -1,4 +1,4 @@
-twist_mux:
+/**:
   ros__parameters:
     use_stamped: false            # required by twist_mux
     topic_name: "cmd_vel_out"     # output topic to robot controller
@@ -6,7 +6,7 @@ twist_mux:
       navigation:
         topic: cmd_vel            # Nav2 output topic
         timeout: 0.5              # how long this command is valid
-        priority: 10              # lower priority than teleop
+        priority: 10             # lower priority than teleop
       joystick:
         topic: cmd_vel_keyboard   # your keyboard teleop
         timeout: 0.5

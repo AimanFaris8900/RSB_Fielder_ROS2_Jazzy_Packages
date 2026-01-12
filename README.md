@@ -46,7 +46,10 @@ ros2 launch fielder_description display.launch.py
 
 5) To start scanning the whole room, there are 2 ways
 	* a) Push Fielder around manually - make sure to press the E-Stop button
-	* b) Use TeleOp - ros2 run fielder_teleop fielder_teleop. Use WASD key on your keyboard and monitor map progression on rviz2
+	* b) Use TeleOp - Run fielder teleop keyboard control. Use WASD key on your keyboard and monitor map progression on rviz2
+ * ```bash
+	ros2 run fielder_teleop fielder_teleop
+   ```
 
 ## How to start autonomous navigation
 
@@ -60,3 +63,7 @@ ros2 launch nav2_bringup navigation_launch.py
 3) Make sure navigation is active. click plus (+) top right, then select GoalTool under nav2_rviz_plugins
 
 4) To make Fielder navigate to selected points, select Nav2 Goal (top) then select points on the map with its orientation/heading
+
+**IMPORTANT**
+- If Fielder does not move after you set Nav2 Goal, you need to stop fielder_teleop keyboard control. Keyboard teleop has higher priority than nav2 cmd_vel
+

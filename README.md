@@ -31,20 +31,26 @@ ros2 run fielder_teleop fielder_teleop_sub
 ```bash
 ros2 launch fielder_navigation mapping.launch.py 
 ```
+3) **(Optional)** Launch Fielder SLAM mapping with the origin relative to robot base
+	* By default, the robot origin point (0,0) will always be at the docking charger. To disable it, run using these parameters:
+	```bash
+	ros2 launch fielder_navigation mapping.launch.py origin_dock:=false
+	```
+	* Now, Fielder origin point (0,0) will be at the exact location when you launch the mapping package
 
-3) Launch Fielder description
+4) Launch Fielder description
 ```bash
 ros2 launch fielder_description display.launch.py 
 ```
 - **Note! Close rviz2 UI for Fielder Description package**
 
-4) Inside fielder_navigation rviz2, add:
+5) Inside fielder_navigation rviz2, add:
 	* a) LaserScan - Select topic /scan, change topic Reliable Policy from "Reliable" to "Best Effort"
 	* b) Map - Select topic /map, wait for SLAM map to appear
 	* c) TF
 	* d) RobotModel (optional) - in Description Topic, select /robot_description
 
-5) To start mapping the whole room, there are 2 ways
+6) To start mapping the whole room, there are 2 ways
 	* a) Push Fielder around manually - make sure to press the E-Stop button
 	* b) Use TeleOp - Run fielder teleop keyboard control. Use WASD key on your keyboard and monitor map progression on rviz2
  * ```bash

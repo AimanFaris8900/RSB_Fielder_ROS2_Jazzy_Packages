@@ -37,7 +37,7 @@ ros2 launch fielder_description display.launch.py
 ```
 - **Note! Close rviz2 UI for Fielder Description package**
 
-4) Inside rviz2, add:
+4) Inside fielder_navigation rviz2, add:
 	* a) LaserScan - Select topic /scan, change topic Reliable Policy from "Reliable" to "Best Effort"
 	* b) Map - Select topic /map, wait for SLAM map to appear
 	* c) TF

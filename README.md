@@ -37,10 +37,10 @@ ros2 launch fielder_description display.launch.py
 ```
 
 4) Inside rviz2, add:
-	a) LaserScan - Select topic /scan, change topic Reliable Policy from "Reliable" to "Best Effort"
-	b) Map - Select topic /map, wait for SLAM map to appear
-	c) TF
-	d) RobotModel (optional) - in Description Topic, select /robot_description
+	* a) LaserScan - Select topic /scan, change topic Reliable Policy from "Reliable" to "Best Effort"
+	* b) Map - Select topic /map, wait for SLAM map to appear
+	* c) TF
+	* d) RobotModel (optional) - in Description Topic, select /robot_description
 
 5) To start scanning the whole room, there are 2 ways
 	a) Push Fielder around manually - make sure to press the E-Stop button

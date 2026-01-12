@@ -6,6 +6,7 @@ Install required packages:
 ```bash
 sudo apt update
 sudo apt install ros-jazzy-twist-mux ros-jazzy-slam-toolbox ros-jazzy-nav2-bringup ros-joint-state-publisher-gui
+```
 
 ## Build
 ```bash
@@ -14,7 +15,7 @@ colcon build
 ```
 source your /install ROS2 workspace:
 source ~/(your_ROS2_workspace_path)/install/setup.bash
-## example
+## Example
 ```bash
 source ~/ros2_ws/install/setup.bash 
 ```

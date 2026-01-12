@@ -38,6 +38,8 @@ point_cloud_data = {
     "points" : []
 }
 
+# ---------------- WEBSOCKET ---------------
+
 def connect_ws():
 
     uri = f"{ws_url}/ws/v2/topics"
@@ -96,6 +98,43 @@ def connect_ws_scan():
     except Exception as e:
         print("Websocket Error: ", e)
 
+#----------------- HTTP ------------------
+
+def set_origin_pose():
+    header = {
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "position" : [0,0,0],
+        "ori" : 0
+    }
+
+    with httpx.Client() as client:
+        url = f"{http_url}/chassis/pose"
+        r = client.post(url, headers=header, json=payload)
+        r.raise_for_status()
+        data = r.json()
+        print("HTTP SET POSE ERROR STATUS: ",data)
+
+# Set Fielder control mode to remote
+def set_control_mode(mode):
+    url = f"{http_url}/services/wheel_control/set_control_mode"
+
+    header = {
+        "Content-Type" : "application/json"
+    }
+    payload = {
+        "control_mode" : mode
+    }
+
+    with httpx.Client() as client:
+        r = client.post(url, headers=header, json=payload)
+        r.raise_for_status()
+        data = r.json()
+
+        print("Set Control Mode: ", data,"\n")
+
 def get_point_cloud():
     return point_cloud_data
 
@@ -135,4 +174,4 @@ def degrees_to_quartenions(deg):
 
 
 if __name__ == "__main__":
-    connect_ws_scan()
+    set_origin_pose()

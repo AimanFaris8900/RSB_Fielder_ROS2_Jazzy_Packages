@@ -11,7 +11,7 @@ class FielderTeleopSubscriberNode(Node):
         super().__init__('fielder_twist')
         self.subscription = self.create_subscription(
             Twist,
-            '/fielder/cmd_vel',
+            '/diff_cont/cmd_vel_unstamped',
             self.subscribe_velocity,
             10
         )

@@ -1,0 +1,3 @@
+[0.000000] (-) TimerEvent: {}
+[0.000353] (-) JobUnselected: {'identifier': 'fielder_nav2'}
+[0.000447] (-) EventReactorShutdown: {}

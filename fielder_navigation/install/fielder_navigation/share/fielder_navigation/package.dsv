@@ -1,0 +1,9 @@
+source;share/fielder_navigation/hook/pythonpath.ps1
+source;share/fielder_navigation/hook/pythonpath.dsv
+source;share/fielder_navigation/hook/pythonpath.sh
+source;share/fielder_navigation/hook/ament_prefix_path.ps1
+source;share/fielder_navigation/hook/ament_prefix_path.dsv
+source;share/fielder_navigation/hook/ament_prefix_path.sh
+source;../../build/fielder_navigation/share/fielder_navigation/hook/pythonpath_develop.ps1
+source;../../build/fielder_navigation/share/fielder_navigation/hook/pythonpath_develop.dsv
+source;../../build/fielder_navigation/share/fielder_navigation/hook/pythonpath_develop.sh

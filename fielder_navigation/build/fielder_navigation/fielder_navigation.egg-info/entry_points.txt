@@ -1,0 +1,3 @@
+[console_scripts]
+fielder_odom = fielder_navigation.fielder_odometry_node:main
+fielder_pc2 = fielder_navigation.fielder_scan_node:main

@@ -4,7 +4,7 @@ import tf2_ros
 from rclpy.node import Node
 from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Point, Quaternion, Pose, TransformStamped
 from nav_msgs.msg import Odometry
-from fielder_navigation.websocket import get_twist, connect_ws, get_pose
+from fielder_navigation.websocket import get_twist, connect_ws, get_pose, set_origin_pose, set_control_mode
 import math
 
 
@@ -14,9 +14,18 @@ class FielderOdometry(Node):
         super().__init__('fielder_odom_pub')
         self.odom_publisher = self.create_publisher(Odometry, '/odom', 10)
         self.tf_publisher = tf2_ros.TransformBroadcaster(self)
+        self.declare_parameter('origin_dock', False)
+        self.origin_dock = self.get_parameter('origin_dock').get_parameter_value().bool_value
         timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.publish_callback)
 
+        self.get_logger().info(f"Origin point to docking charge? = {self.origin_dock}")
+
+        if self.origin_dock == False:
+            set_control_mode("auto")                #uncomment these 3 functions to set robot origin point anywhere
+            set_origin_pose()                       #comment these 3 function to set robot origin point to default (docking port)
+            set_control_mode("remote")
+        
         self.last_time = self.get_clock().now()
         self.x = 0.0
         self.y = 0.0
@@ -36,7 +45,8 @@ class FielderOdometry(Node):
         odommsg = Odometry()
         odommsg.header.stamp = current_time.to_msg()
         odommsg.header.frame_id = 'odom'
-        odommsg.child_frame_id = 'base_link'
+        #odommsg.child_frame_id = 'base_link'
+        odommsg.child_frame_id = 'base_footprint'
 
         # set odom pose
         odommsg.pose.pose.position = Point(x=pose_data['x'], y=pose_data['y'], z=pose_data['z'])
@@ -59,7 +69,8 @@ class FielderOdometry(Node):
         odom_tf = TransformStamped()
         odom_tf.header.stamp = current_time.to_msg()
         odom_tf.header.frame_id = 'odom'
-        odom_tf.child_frame_id = 'base_link'
+        #odom_tf.child_frame_id = 'base_link'
+        odom_tf.child_frame_id = 'base_footprint'
         odom_tf.transform.translation.x = pose_data['x']
         odom_tf.transform.translation.y = pose_data['y']
         odom_tf.transform.translation.z = pose_data['z']

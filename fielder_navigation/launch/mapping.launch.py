@@ -2,17 +2,41 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from rclpy.qos import QoSProfile, ReliabilityPolicy
+from ament_index_python.packages import get_package_share_directory
 import os
 
 package_name = 'fielder_navigation'
 
 def generate_launch_description():
     pkg_share = FindPackageShare(package_name).find(package_name)
-    
+    slam_dir = get_package_share_directory('slam_toolbox')
+    twist_mux_config = os.path.join(
+        get_package_share_directory(package_name),
+        'config',
+        'twist_mux.yaml'
+    )
+
+    origin_dock_arg = DeclareLaunchArgument(
+        'origin_dock',
+        default_value="true",
+        description='Set the origin to charging dock or the robot base'
+    )
+
+    slam_param_file_arg = DeclareLaunchArgument(
+        'slam_params_file',
+        default_value = os.path.join(pkg_share, 'config', 'mapper_params_online_async.yaml'),
+        description='Path to SLAM Toolbox parameter'
+    )
+
+    origin_dock = LaunchConfiguration('origin_dock')
+    slam_param_file = LaunchConfiguration('slam_params_file')
+
     return LaunchDescription([
+        origin_dock_arg,
+        slam_param_file_arg,
         # Odom node
         Node(
             package=package_name,
@@ -20,8 +44,20 @@ def generate_launch_description():
             name="fielder_odom",
             output="screen",
             parameters=[{
-                "use_sim_time": False
+                "use_sim_time": False,
+                "origin_dock" : origin_dock
             }]
+        ),
+        
+        Node(
+            package='twist_mux',
+            executable='twist_mux',
+            name='twist_mux',
+            output='screen',
+            parameters=[twist_mux_config],
+            remappings=[
+                ('cmd_vel_out', 'diff_cont/cmd_vel_unstamped')
+            ]
         ),
 
         IncludeLaunchDescription(
@@ -30,92 +66,51 @@ def generate_launch_description():
             )
         ),
 
-        # # PointCloud publisher node
-        # Node(
-        #     package= package_name, 
-        #     executable='fielder_pc2',  
-        #     name='fielder_point_clouds',
-        #     output='screen',
-        #     parameters=[{
-        #         'frame_id': 'base_scan',
-        #         'publish_rate': 10.0,
-        #     }]
-        # ),
-
-        
-        # # PointCloud to LaserScan converter
-        # Node(
-        #     package='pointcloud_to_laserscan',
-        #     executable='pointcloud_to_laserscan_node',
-        #     name='pointcloud_to_laserscan',
-        #     parameters=[{
-        #         'target_frame': 'base_scan',  # CHANGED: Use same frame as input
-        #         'transform_tolerance': 0.5,  # INCREASED: More tolerant
-        #         'min_height': -0.5,
-        #         'max_height': 1.0,
-        #         'angle_min': -3.14159,
-        #         'angle_max': 3.14159,
-        #         'angle_increment': 0.00872,  # ~0.5 degrees
-        #         'scan_time': 0.1,
-        #         'range_min': 0.1,
-        #         'range_max': 10.0,
-        #         'use_inf': True,
-        #         'concurrency_level': 1,  # ADDED: Single threaded processing
-        #         'queue_size': 50,  # ADDED: Larger queue
-        #     }],
-        #     remappings=[
-        #         ('cloud_in', '/scan_matched_points'),  # Input: your pointcloud topic
-        #         ('scan', '/scan'),  # Output: laser scan topic
-        #     ],
-        #     output='screen'
-        # ),
-
-        # SLAM Toolbox (using lifecycle-free version)
-        Node(
-            package='slam_toolbox',
-            executable='async_slam_toolbox_node',
-            name='slam_toolbox',
-            output='screen',
-            parameters=[{
-                'use_sim_time': False,
-                'odom_frame': 'odom',
-                'map_frame': 'map',
-                'base_frame': 'base_link',
-                'scan_topic': '/scan',
-                'mode': 'mapping',
-                'transform_timeout': 0.5,
-                'tf_buffer_duration': 30.0,
-                'throttle_scans': 1,
-                'map_update_interval': 1.0,
-                'resolution': 0.05,
-                'max_laser_range': 10.0,
-                'minimum_travel_distance': 0.2,
-                'minimum_travel_heading': 0.2,
-                # QoS overrides for sensor data
-                'qos': 1,  # Use sensor data QoS profile
-            }],
-            # Add remapping with QoS override
-            remappings=[
-                ('/scan', '/scan'),
-            ],
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(slam_dir, 'launch', 'online_async_launch.py')
+            ),
+            launch_arguments={
+                'slam_params_file' : slam_param_file,
+                'use_sim_time' : 'false'
+            }.items()
         ),
 
-        # # SLAM Toolbox online async
+        # # SLAM Toolbox (using lifecycle-free version)
         # Node(
-        #     package="slam_toolbox",
-        #     executable="async_slam_toolbox_node",
-        #     name="slam_toolbox",
-        #     parameters=[{"use_sim_time": False}],
-        #     remappings=[("scan", "/scan")],
-        #     output="screen"
+        #     package='slam_toolbox',
+        #     executable='async_slam_toolbox_node',
+        #     name='slam_toolbox',
+        #     output='screen',
+        #     parameters=[{
+        #         'use_sim_time': False,
+        #         'odom_frame': 'odom',
+        #         'map_frame': 'map',
+        #         'base_frame': 'base_link',
+        #         'scan_topic': '/scan',
+        #         'mode': 'mapping',
+        #         'transform_timeout': 0.5,
+        #         'tf_buffer_duration': 30.0,
+        #         'throttle_scans': 1,
+        #         'map_update_interval': 1.0,
+        #         'resolution': 0.05,
+        #         'max_laser_range': 10.0,
+        #         'minimum_travel_distance': 0.2,
+        #         'minimum_travel_heading': 0.2,
+        #         # QoS overrides for sensor data
+        #         'qos': 1,  # Use sensor data QoS profile
+        #     }],
+        #     # Add remapping with QoS override
+        #     remappings=[
+        #         ('/scan', '/scan'),
+        #     ],
         # ),
 
-        # RViz2
         Node(
             package="rviz2",
             executable="rviz2",
             name="rviz2",
             arguments=["-d", "/opt/ros/jazzy/share/slam_toolbox/rviz/online_async.rviz"],
             output="screen"
-        )
+        ),
     ])

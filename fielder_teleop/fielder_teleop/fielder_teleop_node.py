@@ -9,7 +9,7 @@ class FielderOdometryPublisher(Node):
 
     def __init__(self):
         super().__init__('fielder_teleop_publisher')
-        self.publisher_ = self.create_publisher(Twist, 'fielder/cmd_vel', 10 )
+        self.publisher_ = self.create_publisher(Twist, '/cmd_vel_keyboard', 10 )
         timer_period = 0.3
         self.timer = self.create_timer(timer_period, self.publish_velocity)
         self.i = 0

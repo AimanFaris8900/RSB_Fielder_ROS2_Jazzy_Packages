@@ -1,0 +1,26 @@
+running develop
+running egg_info
+creating fielder_navigation.egg-info
+writing fielder_navigation.egg-info/PKG-INFO
+writing dependency_links to fielder_navigation.egg-info/dependency_links.txt
+writing entry points to fielder_navigation.egg-info/entry_points.txt
+writing requirements to fielder_navigation.egg-info/requires.txt
+writing top-level names to fielder_navigation.egg-info/top_level.txt
+writing manifest file 'fielder_navigation.egg-info/SOURCES.txt'
+reading manifest file 'fielder_navigation.egg-info/SOURCES.txt'
+writing manifest file 'fielder_navigation.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/lib/python3.12/site-packages/fielder-navigation.egg-link (link to .)
+Installing fielder_odom script to /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/lib/fielder_navigation
+Installing fielder_pc2 script to /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/lib/fielder_navigation
+
+Installed /home/rsbdev/ros2_ws/src/fielder_navigation/build/fielder_navigation
+running symlink_data
+creating /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/ament_index
+creating /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/ament_index/resource_index
+creating /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/ament_index/resource_index/packages
+symbolically linking /home/rsbdev/ros2_ws/src/fielder_navigation/build/fielder_navigation/resource/fielder_navigation -> /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/ament_index/resource_index/packages
+symbolically linking /home/rsbdev/ros2_ws/src/fielder_navigation/build/fielder_navigation/package.xml -> /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/fielder_navigation
+creating /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/fielder_navigation/launch
+symbolically linking /home/rsbdev/ros2_ws/src/fielder_navigation/build/fielder_navigation/launch/pointcloud_to_laserscan_launch.py -> /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/fielder_navigation/launch
+symbolically linking /home/rsbdev/ros2_ws/src/fielder_navigation/build/fielder_navigation/launch/mapping.launch.py -> /home/rsbdev/ros2_ws/src/fielder_navigation/install/fielder_navigation/share/fielder_navigation/launch

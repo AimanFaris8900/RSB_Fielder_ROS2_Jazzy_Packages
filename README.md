@@ -43,8 +43,8 @@ ros2 launch fielder_description display.launch.py
 	* d) RobotModel (optional) - in Description Topic, select /robot_description
 
 5) To start scanning the whole room, there are 2 ways
-	a) Push Fielder around manually - make sure to press the E-Stop button
-	b) Use TeleOp - ros2 run fielder_teleop fielder_teleop. Use WASD key on your keyboard and monitor map progression on rviz2
+	* a) Push Fielder around manually - make sure to press the E-Stop button
+	* b) Use TeleOp - ros2 run fielder_teleop fielder_teleop. Use WASD key on your keyboard and monitor map progression on rviz2
 
 ## How to start autonomous navigation
 

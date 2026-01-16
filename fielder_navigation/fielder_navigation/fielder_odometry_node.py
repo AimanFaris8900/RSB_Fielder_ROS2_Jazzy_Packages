@@ -21,7 +21,7 @@ class FielderOdometry(Node):
 
         self.get_logger().info(f"Origin point to docking charge? = {self.origin_dock}")
 
-        if self.origin_dock == False:
+        if self.origin_dock == False:               #By default the origin is relative to docking charge (value = true)
             set_control_mode("auto")                #uncomment these 3 functions to set robot origin point anywhere
             set_origin_pose()                       #comment these 3 function to set robot origin point to default (docking port)
             set_control_mode("remote")

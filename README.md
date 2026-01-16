@@ -62,6 +62,12 @@ ros2 launch fielder_description display.launch.py
 	ros2 run fielder_teleop fielder_teleop
    ```
 
+## Save SLAM map into image
+1) Run this ROS2 command. Replace 'map_name' with your own map name. It will be save as "map_name.pgm"
+```bash
+ros2 service call /slam_toolbox/save_map slam_toolbox/srv/SaveMap "{name: {data: 'map_name'}}"
+```
+
 ## How to start autonomous navigation
 
 1) Keep the rviz2 UI open, run nav2 bringup
@@ -77,9 +83,3 @@ ros2 launch nav2_bringup navigation_launch.py
 
 **IMPORTANT**
 - If Fielder does not move after you set Nav2 Goal, you need to stop fielder_teleop keyboard control. Keyboard teleop has higher priority than nav2 cmd_vel
-
-## Save SLAM map into image
-1) Run this ROS2 command. Replace 'map_name' with your own map name. It will be save as "map_name.pgm"
-```bash
-ros2 service call /slam_toolbox/save_map slam_toolbox/srv/SaveMap "{name: {data: 'map_name'}}"
-```

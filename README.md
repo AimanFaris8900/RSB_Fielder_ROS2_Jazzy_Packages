@@ -1,5 +1,11 @@
 ## SETUP FIELDER AMR ROS2 PACKAGES
 
+## Clone Repository
+* Clone this repository into your local ROS2 workspace
+```bash
+cd ~/(your_ros2_workspace)/src/
+git clone https://github.com/AimanFaris8900/RSB_Fielder_ROS2_Jazzy_Packages .
+```
 
 ## Dependencies
 Install required packages:

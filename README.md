@@ -11,7 +11,7 @@ git clone https://github.com/AimanFaris8900/RSB_Fielder_ROS2_Jazzy_Packages .
 Install required packages:
 ```bash
 sudo apt update
-sudo apt install ros-jazzy-twist-mux ros-jazzy-slam-toolbox ros-jazzy-nav2-bringup ros-joint-state-publisher-gui
+sudo apt install ros-jazzy-twist-mux ros-jazzy-slam-toolbox ros-jazzy-nav2-bringup ros-jazzy-joint-state-publisher-gui
 ```
 
 ## Build

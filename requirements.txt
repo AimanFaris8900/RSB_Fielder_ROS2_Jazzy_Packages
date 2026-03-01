@@ -1,0 +1,2 @@
+httpx
+websockets>=16.0

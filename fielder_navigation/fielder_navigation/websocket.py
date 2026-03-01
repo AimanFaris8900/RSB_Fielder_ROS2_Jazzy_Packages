@@ -5,7 +5,7 @@ import httpx
 import time
 import math
 
-ip = "192.168.0.250"
+ip = "192.168.0.49"
 
 ws_url = f"ws://{ip}:8090"
 

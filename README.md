@@ -14,6 +14,14 @@ sudo apt update
 sudo apt install ros-jazzy-twist-mux ros-jazzy-slam-toolbox ros-jazzy-nav2-bringup ros-jazzy-joint-state-publisher-gui ros-jazzy-pointcloud-to-laserscan ros-jazzy-tf-transformations
 ```
 
+Create Python environment and install these Python libraries:
+```bash
+cd ~/(your_ros2_workspace)/src/
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
 ## Build
 ```bash
 cd ~/(your_ros2_workspace)

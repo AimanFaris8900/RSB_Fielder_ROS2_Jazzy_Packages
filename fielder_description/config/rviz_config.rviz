@@ -1,0 +1,31 @@
+Panels:
+  - Class: rviz_default_plugins/Displays
+    Name: Displays
+  - Class: rviz_default_plugins/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Name: RobotModel
+      Class: rviz_default_plugins/RobotModel
+      Enabled: true
+      Robot Description: robot_description
+      TF Prefix: ''
+      Show Visual: true
+      Show Collision: true
+      Alpha: 1.0
+
+    - Name: LaserScan
+      Class: rviz_default_plugins/LaserScan
+      Enabled: true
+      Topic: /scan
+      Size (m): 0.1
+      Color: 255; 0; 0
+      Style: Points
+      Queue Size: 10
+      Decay Time: 0.0
+
+  Global Options:
+    Fixed Frame: base_link
+    Background Color: 48; 48; 48
+    Frame Rate: 30

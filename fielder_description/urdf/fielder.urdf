@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<robot name="fielder">
+    <material name="grey">
+        <color rgba="0.7 0.7 0.7 1" />
+    </material>
+
+    <material name="green">
+        <color rgba="0 0.7 0 1" />
+    </material>
+
+    <material name="red">
+        <color rgba="0.7 0 0 1" />
+    </material>
+
+    <link name="base_footprint" />
+
+    <link name="fielder_chassis">
+        <visual>
+            <geometry>
+                <mesh filename="package://fielder_description/meshes/fielder.dae" scale="1 1 1"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 -1.57" />
+        </visual>
+    </link>
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.74 0.5 0.16" />
+            </geometry>
+            <origin xyz="0 0 0.08" rpy="0 0 0" />
+            <material name="green" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <box size="0.84 0.6 0.3" />
+            </geometry>
+            <origin xyz="0 0 0.08" rpy="0 0 0" />
+            <material name="red" />
+        </collision>
+
+        <inertial>
+            <mass value="90" />
+            <inertia 
+            ixx="2.067" ixy="0" ixz="0"
+            iyy="4.299" iyz="0"
+            izz="5.982" />
+            <origin xyz="0 0 0.08" rpy="0 0 0" />
+        </inertial>
+    </link>
+
+    <link name="lidar_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.08" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="grey" />
+        </visual>
+    </link>
+
+    <link name="left_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.1" length="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="1.57 0 0" />
+            <material name="red" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="0.1" length="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="1.57 0 0" />
+        </collision>
+    </link>
+
+    <link name="right_wheel_link">
+        <visual>
+            <geometry>
+                <cylinder radius="0.1" length="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="1.57 0 0" />
+            <material name="red" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="0.1" length="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="1.57 0 0" />
+        </collision>
+    </link>
+
+    <link name="castor_wheel_front_right">
+        <visual>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="grey" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </collision>
+    </link>
+
+    <link name="castor_wheel_front_left">
+        <visual>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="grey" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </collision>
+    </link>
+
+    <link name="castor_wheel_rear_right">
+        <visual>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="grey" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </collision>
+    </link>
+
+    <link name="castor_wheel_rear_left">
+        <visual>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="grey" />
+        </visual>
+
+        <collision>
+            <geometry>
+                <sphere radius="0.05" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </collision>
+    </link>
+
+    <joint name="base_chassis" type="fixed">
+        <parent link="base_footprint" />
+        <child link="fielder_chassis" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="base_joint" type="fixed" >
+        <parent link="base_footprint" />
+        <child link="base_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <joint name="base_lidar_joint" type="fixed" >
+        <parent link="base_link" />
+        <child link="lidar_link" />
+        <origin xyz="0 0 0.16" rpy="0 0 0" />
+    </joint>
+
+    <joint name="base_left_wheel_joint" type="continuous" >
+        <parent link="base_link" />
+        <child link="left_wheel_link" />
+        <origin xyz="0 0.25 0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+    </joint>
+    
+    <joint name="base_right_wheel_joint" type="continuous" >
+        <parent link="base_link" />
+        <child link="right_wheel_link" />
+        <origin xyz="0 -0.25 0" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+    </joint>
+
+    <joint name="base_castor_wheel_front_right" type="fixed">
+        <parent link="base_link" />
+        <child link="castor_wheel_front_right" />
+        <origin xyz="0.3 -0.15 -0.05" rpy="0 0 0" />
+    </joint>
+
+    <joint name="base_castor_wheel_front_left" type="fixed">
+        <parent link="base_link" />
+        <child link="castor_wheel_front_left" />
+        <origin xyz="0.3 0.15 -0.05" rpy="0 0 0" />
+    </joint>
+
+    <joint name="base_castor_wheel_rear_right" type="fixed">
+        <parent link="base_link" />
+        <child link="castor_wheel_rear_right" />
+        <origin xyz="-0.3 -0.15 -0.05" rpy="0 0 0" />
+    </joint>
+
+    <joint name="base_castor_wheel_rear_left" type="fixed">
+        <parent link="base_link" />
+        <child link="castor_wheel_rear_left" />
+        <origin xyz="-0.3 0.15 -0.05" rpy="0 0 0" />
+    </joint>
+
+</robot>
